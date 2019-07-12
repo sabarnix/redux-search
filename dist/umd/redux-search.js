@@ -925,8 +925,9 @@
                         store.subscribe(function() {
                             var nextState = store.getState(), searchState = store[_constants.SEARCH_STATE_SELECTOR](nextState);
                             for (var resourceName in resourceIndexes) {
-                                var resource = resourceSelector(resourceName, nextState);
-                                if (searchState && (0, _keys2.default)(searchState).length && resource && (0, _keys2.default)(resource).length && currentResources[resourceName] !== resource) {
+                                var resource = resourceSelector(resourceName, nextState), currentResource = currentResources[resourceName] || {};
+                                if (searchState && (0, _keys2.default)(searchState).length && resource && (0, _keys2.default)(resource).length && (0, 
+                                _keys2.default)(currentResource).length !== (0, _keys2.default)(resource).length) {
                                     currentResources[resourceName] = resource;
                                     var resourceIndex = resourceIndexes[resourceName], searchString = searchState[resourceName].text;
                                     store.dispatch(actions.indexResource({
