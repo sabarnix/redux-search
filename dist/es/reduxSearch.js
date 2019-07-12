@@ -77,7 +77,7 @@ export default function reduxSearch() {
             var resource = resourceSelector(resourceName, nextState);
 
             // Only rebuild the search index for resources that have changed
-            if (searchState && _Object$keys(searchState).length && resource && _Object$keys(resource).length && currentResources[resourceName] !== resource) {
+            if (searchState && _Object$keys(searchState).length && resource && _Object$keys(resource).length && currentResources[resourceName] && _Object$keys(currentResources[resourceName]).length !== _Object$keys(resource).length) {
               currentResources[resourceName] = resource;
 
               var resourceIndex = resourceIndexes[resourceName];
