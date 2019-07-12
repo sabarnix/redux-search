@@ -31,7 +31,8 @@ export default function reduxSearch ({
   resourceIndexes = {},
   resourceSelector,
   searchApi = new SearchApi(),
-  searchStateSelector = defaultSearchStateSelector
+  searchStateSelector = defaultSearchStateSelector,
+  autoInit = true
 } = {}) {
   return createStore => (reducer, initialState) => {
     const store = applyMiddleware(
@@ -41,8 +42,10 @@ export default function reduxSearch ({
     store.search = searchApi
     store[SEARCH_STATE_SELECTOR] = searchStateSelector
 
-    const resourceNames = Object.keys(resourceIndexes)
-    store.dispatch(actions.initializeResources(resourceNames))
+    if (autoInit) {
+      const resourceNames = Object.keys(resourceIndexes)
+      store.dispatch(actions.initializeResources(resourceNames))
+    }
 
     searchApi.subscribe(({ result, resourceName, text }) => {
       // Here we handle item responses
@@ -65,7 +68,7 @@ export default function reduxSearch ({
           const resource = resourceSelector(resourceName, nextState)
 
           // Only rebuild the search index for resources that have changed
-          if (currentResources[resourceName] !== resource) {
+          if (searchState && Object.keys(searchState).length && resource && Object.keys(resource).length && currentResources[resourceName] !== resource) {
             currentResources[resourceName] = resource
 
             const resourceIndex = resourceIndexes[resourceName]
